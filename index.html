@@ -77,7 +77,7 @@ function mesh(geo,material,x,y,z,parent=scene){const o=new THREE.Mesh(geo,materi
 function box(x,y,z,w,h,d,material,parent=scene){return mesh(new THREE.BoxGeometry(w,h,d),material,x,y,z,parent)}
 function cyl(x,y,z,r1,r2,h,material,parent=scene){return mesh(new THREE.CylinderGeometry(r1,r2,h,12),material,x,y,z,parent)}
 function line(points,color=0x56dfff,r=.035){const curve=new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p)));return mesh(new THREE.TubeGeometry(curve,32,r,6,false),mat(color,.35,.35),0,0,0)}
-// Ground and tunnel: long open-front cutaway, arched-ish rocky shell
+
 box(0,-.28,0,18,.5,7.4,floorMat);
 box(0,5.7,0,18,.35,7.4,rock2);
 box(0,2.8,-3.55,18,5.7,.5,rock);
@@ -90,27 +90,22 @@ for(let i=0;i<95;i++){
  const x=-8.7+Math.random()*17.4,z=-3.1+Math.random()*6.2,r=.06+Math.random()*.16;
  const b=mesh(new THREE.DodecahedronGeometry(r,0),Math.random()>.5?rock:rock2,x,-.02+r,z); b.rotation.set(Math.random(),Math.random(),Math.random());
 }
-// Repeating support frames
 for(const x of [-8,-4,0,4,8]){
  for(const z of [-2.9,2.9]){cyl(x,2.65,z,.09,.09,5.1,metal);box(x,5.12,z,.28,.16,.3,yellow)}
  box(x,5.12,0,.18,.14,5.8,metal);
- // hazard stripe small
  for(let j=0;j<4;j++)box(x,1.2+j*.7,2.91,.19,.22,.04,j%2?darkMetal:yellow);
 }
-// Rails and sleepers
 for(const z of [-.55,.55])box(0,.08,z,17,.08,.09,metal);
 for(let x=-8.2;x<8.3;x+=.7)box(x,.02,0,.13,.08,1.5,darkMetal);
-// Pipes overhead
 for(const z of [-2.35,-1.9,1.9,2.35]){cyl(0,4.7,z,.07,.07,17,metal).rotation.z=Math.PI/2}
 for(let x=-8;x<=8;x+=2){for(const z of [-2.35,2.35])cyl(x,4.7,z,.13,.13,.13,yellow)}
-// Sensor, bracket and glowing lens at entry
+
 box(-7.3,3.65,-2.5,.62,.55,.38,darkMetal); const sensor=mesh(new THREE.SphereGeometry(.16,20,14),sensorMat,-7.3,3.65,-2.28); const sensorRing=mesh(new THREE.TorusGeometry(.22,.035,8,24),mat(0xff756f,.3,.2,0x8e1d1a),-7.3,3.65,-2.24); sensorRing.rotation.x=Math.PI/2;
 line([[-7.3,3.9,-2.5],[-7.3,4.4,-2.5],[-6.6,4.4,-2.5]],0xff514d,.04);
-// Control box
 box(7.2,3.5,-2.5,1.05,1.25,.35,darkMetal); box(7.2,3.5,-2.3,.87,1.05,.05,metal);
 for(let i=0;i<3;i++){mesh(new THREE.SphereGeometry(.075,12,8),mat([0x39e5b4,0x4fc9ff,0xffbf47][i],.2,.1,[0x0c6d45,0x064b73,0x724400][i]),6.95+i*.25,3.8,-2.25)}
 box(7.2,3.15,-2.25,.45,.15,.05,mat(0x142330));
-// Active suppressant nozzle array
+
 const nozzles=[], powder=[];
 for(let i=0;i<7;i++){
  const x=-4.9+i*.48;
@@ -120,42 +115,41 @@ for(let i=0;i<7;i++){
  nozzles.push(n);
  const puff=mesh(new THREE.SphereGeometry(.18,10,8),new THREE.MeshBasicMaterial({color:0xd6f5ff,transparent:true,opacity:0}),x,2.9,-1.1); puff.scale.set(1,1.4,1); powder.push({obj:puff,baseX:x,baseY:2.8,phase:Math.random()*6.28});
 }
-// Water bags in line, transparent blue droplet-like spheres
+
 const bags=[];
 for(let i=0;i<8;i++){
  const x=-.2+i*.55;
  const rope=line([[x,4.85,1.05],[x,4.2,1.05]],0xd5c58c,.018);
  cyl(x,4.88,1.05,.045,.045,.15,metal);
- const b=mesh(new THREE.SphereGeometry(.31,20,16),water,x,3.8,1.05);b.scale.set(.78,1.22,.75);
+ const b=mesh(new THREE.SphereGeometry(.31,20,16),water,x,3.8,1.05); b.scale.set(.78,1.22,.75);
  const shine=mesh(new THREE.SphereGeometry(.07,10,8),mat(0xc5f5ff,.1,0,0x1d8db5),x-.1,3.92,.83); shine.scale.set(.5,1.3,.3);
  bags.push({obj:b,rope,shine,x,baseY:3.8,phase:Math.random()*6.28,burst:0});
 }
-// small mining truck
-const truck=new THREE.Group();scene.add(truck);truck.position.set(5.6,.15,.5);
-box(0,.42,0,1.25,.48,.72,yellow,truck);box(-.18,.83,-.02,.57,.45,.63,mat(0xe5a82c),truck);box(.28,.95,0,.38,.25,.6,mat(0x8eb5ca,.2,.1),truck);
-for(const x of [-.4,.42])for(const z of [-.39,.39]){const w=mesh(new THREE.CylinderGeometry(.17,.17,.12,16),mat(0x101820,.9),x,.18,z,truck);w.rotation.x=Math.PI/2;mesh(new THREE.CylinderGeometry(.075,.075,.125,12),yellow,x,.18,z,truck).rotation.x=Math.PI/2}
-// Label sprites
+
+const truck=new THREE.Group(); scene.add(truck); truck.position.set(5.6,.15,.5);
+box(0,.42,0,1.25,.48,.72,yellow,truck); box(-.18,.83,-.02,.57,.45,.63,mat(0xe5a82c),truck); box(.28,.95,0,.38,.25,.6,mat(0x8eb5ca,.2,.1),truck);
+for(const x of [-.4,.42])for(const z of [-.39,.39]){const w=mesh(new THREE.CylinderGeometry(.17,.17,.12,16),mat(0x101820,.9),x,.18,z,truck); w.rotation.x=Math.PI/2; mesh(new THREE.CylinderGeometry(.075,.075,.125,12),yellow,x,.18,z,truck).rotation.x=Math.PI/2}
+
 const labels=[];
 function label(text,x,y,z,color='#dff7ff'){
- const c=document.createElement('canvas');c.width=512;c.height=128;const ctx=c.getContext('2d');ctx.fillStyle='rgba(4,19,34,.88)';ctx.strokeStyle=color;ctx.lineWidth=5;roundRect(ctx,5,5,502,118,22);ctx.fill();ctx.stroke();ctx.fillStyle=color;ctx.font='bold 30px Arial';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,256,65);
- const tex=new THREE.CanvasTexture(c);const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:false}));sprite.position.set(x,y,z);sprite.scale.set(2.5,.63,1);scene.add(sprite);labels.push(sprite);return sprite;
+ const c=document.createElement('canvas'); c.width=512; c.height=128; const ctx=c.getContext('2d'); ctx.fillStyle='rgba(4,19,34,.88)'; ctx.strokeStyle=color; ctx.lineWidth=5; roundRect(ctx,5,5,502,118,22); ctx.fill(); ctx.stroke(); ctx.fillStyle=color; ctx.font='bold 30px Arial'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(text,256,65);
+ const tex=new THREE.CanvasTexture(c); const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:false})); sprite.position.set(x,y,z); sprite.scale.set(2.5,.63,1); scene.add(sprite); labels.push(sprite); return sprite;
 }
 function roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
 label('OPTICAL / IR SENSOR',-7.1,4.65,-2.4,'#ff7772');
 label('ACTIVE POWDER NOZZLES',-3.7,4.85,-.8,'#56dfff');
 label('PASSIVE WATER BAGS',1.5,4.95,1.1,'#4de8ce');
 label('CONTROL UNIT',7.15,4.45,-2.3,'#cf9aff');
-// transparent front plane subtle framing, open viewing side is toward camera
-box(0,2.8,3.72,18,.12,.12,glass); // edge sill only
-// particles
-const particleCount=450;const pgeo=new THREE.BufferGeometry();const positions=new Float32Array(particleCount*3);const pvel=[];
+box(0,2.8,3.72,18,.12,.12,glass);
+
+const particleCount=450; const pgeo=new THREE.BufferGeometry(); const positions=new Float32Array(particleCount*3); const pvel=[];
 for(let i=0;i<particleCount;i++){positions[i*3]=-7+Math.random()*1;positions[i*3+1]=.4+Math.random()*3;positions[i*3+2]=-1.3+Math.random()*2.6;pvel.push({x:.03+Math.random()*.06,y:(Math.random()-.4)*.04,z:(Math.random()-.5)*.06,life:Math.random()})}
-pgeo.setAttribute('position',new THREE.BufferAttribute(positions,3));const pmat=new THREE.PointsMaterial({color:0xffa44d,size:.13,transparent:true,opacity:0,depthWrite:false});const particles=new THREE.Points(pgeo,pmat);scene.add(particles);
-// shockwave ring
-const wave=mesh(new THREE.TorusGeometry(1,.06,8,80),new THREE.MeshBasicMaterial({color:0xff9b43,transparent:true,opacity:0}),-7,2.3,0);wave.scale.set(1,1,1);wave.rotation.y=Math.PI/2;
-// soft powder clouds
+pgeo.setAttribute('position',new THREE.BufferAttribute(positions,3)); const pmat=new THREE.PointsMaterial({color:0xffa44d,size:.13,transparent:true,opacity:0,depthWrite:false}); const particles=new THREE.Points(pgeo,pmat); scene.add(particles);
+const wave=mesh(new THREE.TorusGeometry(1,.06,8,80),new THREE.MeshBasicMaterial({color:0xff9b43,transparent:true,opacity:0}),-7,2.3,0); wave.scale.set(1,1,1); wave.rotation.y=Math.PI/2;
+
 const clouds=[];
-for(let i=0;i<45;i++){const m=new THREE.MeshBasicMaterial({color:i%3===0?0xeaf9ff:0xb9e8f7,transparent:true,opacity:0,depthWrite:false});const o=mesh(new THREE.SphereGeometry(.25+Math.random()*.25,10,8),m,-4,2.2,0);clouds.push({obj:o,mat:m,seed:Math.random(),y:Math.random()*1.8});}
+for(let i=0;i<45;i++){const m=new THREE.MeshBasicMaterial({color:i%3===0?0xeaf9ff:0xb9e8f7,transparent:true,opacity:0,depthWrite:false}); const o=mesh(new THREE.SphereGeometry(.25+Math.random()*.25,10,8),m,-4,2.2,0); clouds.push({obj:o,mat:m,seed:Math.random(),y:Math.random()*1.8});}
+
 const steps=[
  ['READY','Explore the tunnel, then run the conceptual suppression sequence.'],
  ['DETECTION','Optical / IR sensor detects a simulated flash and signals the control unit.'],
@@ -164,38 +158,81 @@ const steps=[
  ['SUPPRESSION','The active suppressant and water curtain overlap in this visual model to illustrate flame cooling and interrupted propagation.'],
  ['CONTAINMENT','The simulated event fades. The protected section remains visible for inspection.']
 ];
-let phase=-1,phaseStart=0,running=false,labelsOn=true,elapsed=0,last=performance.now();
+
+let phase=-1, running=false, labelsOn=true, simStartTime=0, last=performance.now();
 const $=s=>document.querySelector(s);
-function setStep(i){phase=i;phaseStart=elapsed;$('#stepText').innerHTML='<strong>'+steps[i][0]+'</strong> — '+steps[i][1];$('#statusPill').textContent=i===0?'● SYSTEM STANDBY':i===5?'● SIMULATION COMPLETE':'● '+steps[i][0];}
-function updateUI(i){$('#sensorState').textContent=i>=1?'Flash detected · signal sent':'Monitoring tunnel conditions';$('#activeState').textContent=i>=2&&i<=4?'Suppressant deployment simulated':'Nozzle array armed';$('#waterState').textContent=i>=3&&i<=4?'Water curtain simulated':'Suspended bags in position';$('#controlState').textContent=i===0?'Awaiting sensor signal':i===5?'Sequence complete':'Signal received · sequence active';$('#sensorDot').style.background=i>=1?'#ff514d':'#35e6bd';$('#activeDot').style.background=i>=2&&i<=4?'#48d9ff':'#416b85';$('#waterDot').style.background=i>=3&&i<=4?'#2dd4bf':'#416b85';$('#controlDot').style.background=i>=1?'#c084fc':'#416b85';}
-function simulate(){running=true;elapsed=0;setStep(1);updateUI(1);$('#simulate').disabled=true;warm.intensity=4;wave.material.opacity=.9;wave.scale.set(.4,.4,.4);sensorMat.emissive.setHex(0xff211c);toast('Simulation started');}
-function reset(){running=false;elapsed=0;setStep(0);updateUI(0);$('#simulate').disabled=false;warm.intensity=0;wave.material.opacity=0;pmat.opacity=0;for(const p of powder)p.obj.material.opacity=0;for(const c of clouds)c.mat.opacity=0;for(const b of bags){b.burst=0;b.obj.visible=true;b.obj.scale.set(.78,1.22,.75);b.shine.visible=true}truck.position.x=5.6;for(const p of pvel)p.life=Math.random();sensorMat.emissive.setHex(0x8d100e);toast('Simulation reset');}
-function toast(t){$('#toast').textContent=t;$('#toast').style.opacity=1;setTimeout(()=>$('#toast').style.opacity=0,1500)}
-$('#simulate').addEventListener('click',simulate);$('#reset').addEventListener('click',reset);$('#view').addEventListener('click',()=>{camera.position.set(11,8,17);controls.target.set(0,2,0);controls.update()});$('#labels').addEventListener('click',()=>{labelsOn=!labelsOn;labels.forEach(l=>l.visible=labelsOn);$('#labels').textContent='Labels: '+(labelsOn?'ON':'OFF')});
-function animate(now){requestAnimationFrame(animate);const dt=Math.min((now-last)/1000,.04);last=now;elapsed+=dt;controls.update();const t=elapsed;
- // idle motion
- bags.forEach(b=>{if(b.burst===0){b.obj.position.y=b.baseY+Math.sin(t*1.1+b.phase)*.035;b.shine.position.y=b.obj.position.y+.12;}});
+function setStep(i){phase=i; $('#stepText').innerHTML='<strong>'+steps[i][0]+'</strong> — '+steps[i][1]; $('#statusPill').textContent=i===0?'● SYSTEM STANDBY':i===5?'● SIMULATION COMPLETE':'● '+steps[i][0];}
+function updateUI(i){$('#sensorState').textContent=i>=1?'Flash detected · signal sent':'Monitoring tunnel conditions'; $('#activeState').textContent=i>=2&&i<=4?'Suppressant deployment simulated':'Nozzle array armed'; $('#waterState').textContent=i>=3&&i<=4?'Water curtain simulated':'Suspended bags in position'; $('#controlState').textContent=i===0?'Awaiting sensor signal':i===5?'Sequence complete':'Signal received · sequence active'; $('#sensorDot').style.background=i>=1?'#ff514d':'#35e6bd'; $('#activeDot').style.background=i>=2&&i<=4?'#48d9ff':'#416b85'; $('#waterDot').style.background=i>=3&&i<=4?'#2dd4bf':'#416b85'; $('#controlDot').style.background=i>=1?'#c084fc':'#416b85';}
+
+function simulate(){
+ if(running) return;
+ running=true; simStartTime = performance.now(); setStep(1); updateUI(1); $('#simulate').disabled=true; warm.intensity=4; wave.material.opacity=.9; wave.scale.set(.4,.4,.4); sensorMat.emissive.setHex(0xff211c); toast('Simulation started');
+}
+
+function reset(){
+ running=false; setStep(0); updateUI(0); $('#simulate').disabled=false; warm.intensity=0; wave.material.opacity=0; pmat.opacity=0; for(const p of powder)p.obj.material.opacity=0; for(const c of clouds)c.mat.opacity=0; for(const b of bags){b.burst=0; b.obj.visible=true; b.obj.scale.set(.78,1.22,.75); b.shine.visible=true} truck.position.x=5.6; for(const p of pvel)p.life=Math.random(); sensorMat.emissive.setHex(0x8d100e); toast('Simulation reset');
+}
+
+function toast(t){$('#toast').textContent=t; $('#toast').style.opacity=1; setTimeout(()=>$('#toast').style.opacity=0,1500)}
+
+$('#simulate').addEventListener('click', simulate);
+$('#reset').addEventListener('click', reset);
+$('#view').addEventListener('click', ()=>{camera.position.set(11,8,17); controls.target.set(0,2,0); controls.update()});
+$('#labels').addEventListener('click', ()=>{labelsOn=!labelsOn; labels.forEach(l=>l.visible=labelsOn); $('#labels').textContent='Labels: '+(labelsOn?'ON':'OFF')});
+
+function animate(now){
+ requestAnimationFrame(animate);
+ const dt=Math.min((now-last)/1000,.04); last=now; controls.update(); const t=now*0.001;
+ 
+ bags.forEach(b=>{if(b.burst===0){b.obj.position.y=b.baseY+Math.sin(t*1.1+b.phase)*.035; b.shine.position.y=b.obj.position.y+.12;}});
+ 
  if(running){
-  const local=elapsed;
-  if(local>1.6&&phase<2){setStep(2);updateUI(2)}
-  if(local>4.5&&phase<3){setStep(3);updateUI(3)}
-  if(local>7.2&&phase<4){setStep(4);updateUI(4)}
-  if(local>10.5&&phase<5){setStep(5);updateUI(5)}
-  if(local<2.3){warm.intensity=5+Math.sin(t*28)*2;pmat.opacity=.6;const pos=pgeo.attributes.position.array;for(let i=0;i<particleCount;i++){pos[i*3]+=.025;pos[i*3+1]+=pvel[i].y;pos[i*3+2]+=pvel[i].z;if(pos[i*3]>-4.3){pos[i*3]=-7+Math.random()*.5;pos[i*3+1]=.4+Math.random()*3;pos[i*3+2]=-1.3+Math.random()*2.6}}pgeo.attributes.position.needsUpdate=true;wave.material.opacity=.8;const s=.4+local*.65;wave.scale.set(s,s,s);wave.position.x=-7+local*.65;}
-  else {warm.intensity=Math.max(0,5-(local-2.3)*.8);pmat.opacity=Math.max(0,.6-(local-2.3)*.07);wave.material.opacity=Math.max(0,.8-(local-2.3)*.1)}
-  // cloud activation, move across tunnel
+  const local=(now - simStartTime)/1000;
+  if(local>1.6&&phase<2){setStep(2); updateUI(2)}
+  if(local>4.5&&phase<3){setStep(3); updateUI(3)}
+  if(local>7.2&&phase<4){setStep(4); updateUI(4)}
+  if(local>10.5&&phase<5){setStep(5); updateUI(5)}
+  
+  if(local<2.3){
+   warm.intensity=5+Math.sin(t*28)*2; pmat.opacity=.6;
+   const pos=pgeo.attributes.position.array;
+   for(let i=0;i<particleCount;i++){
+    pos[i*3]+=.025; pos[i*3+1]+=pvel[i].y; pos[i*3+2]+=pvel[i].z;
+    if(pos[i*3]>-4.3){pos[i*3]=-7+Math.random()*.5; pos[i*3+1]=.4+Math.random()*3; pos[i*3+2]=-1.3+Math.random()*2.6}
+   }
+   pgeo.attributes.position.needsUpdate=true;
+   wave.material.opacity=.8; const s=.4+local*.65; wave.scale.set(s,s,s); wave.position.x=-7+local*.65;
+  } else {
+   warm.intensity=Math.max(0,5-(local-2.3)*.8); pmat.opacity=Math.max(0,.6-(local-2.3)*.07); wave.material.opacity=Math.max(0,.8-(local-2.3)*.1);
+  }
+  
   const active=local>2&&local<10;
-  clouds.forEach((c,i)=>{const on=active&&((i%3===0&&local<6.5)||(i%3!==0&&local>2.4));c.mat.opacity=on?Math.min(.48,.25+Math.sin(t*3+c.seed)*.1):0;c.obj.position.x=-4.8+((local*.7+c.seed*5)%8.8);c.obj.position.y=1.6+c.y+Math.sin(t*2+c.seed)*.25;c.obj.position.z=-.6+Math.sin(c.seed*20)*1.4;c.obj.scale.setScalar(.7+Math.sin(t*2+c.seed)*.2)});
-  // water bags visually rupture/dispersion in phase 3, represented non-destructively as spray droplets
-  bags.forEach((b,i)=>{if(local>4.5&&local<8.5){b.burst=Math.min(1,(local-4.5)*1.5);b.obj.scale.set(.78,1.22*(1-b.burst*.45),.75);b.obj.material=water;b.shine.visible=false;}else if(local>=8.5){b.obj.scale.set(.78,.67,.75)}});
-  if(local>13){running=false;$('#simulate').disabled=false;toast('Sequence complete — reset to replay')}
+  clouds.forEach((c,i)=>{
+   const on=active&&((i%3===0&&local<6.5)||(i%3!==0&&local>2.4));
+   c.mat.opacity=on?Math.min(.48,.25+Math.sin(t*3+c.seed)*.1):0;
+   c.obj.position.x=-4.8+((local*.7+c.seed*5)%8.8);
+   c.obj.position.y=1.6+c.y+Math.sin(t*2+c.seed)*.25;
+   c.obj.position.z=-.6+Math.sin(c.seed*20)*1.4;
+   c.obj.scale.setScalar(.7+Math.sin(t*2+c.seed)*.2);
+  });
+  
+  bags.forEach((b)=>{
+   if(local>4.5&&local<8.5){b.burst=Math.min(1,(local-4.5)*1.5); b.obj.scale.set(.78,1.22*(1-b.burst*.45),.75); b.obj.material=water; b.shine.visible=false;}
+   else if(local>=8.5){b.obj.scale.set(.78,.67,.75)}
+  });
+  
+  if(local>13){running=false; $('#simulate').disabled=false; toast('Sequence complete — reset to replay')}
  }else{
-  warm.intensity=0;clouds.forEach(c=>c.mat.opacity=0);pmat.opacity=0;
+  warm.intensity=0; clouds.forEach(c=>c.mat.opacity=0); pmat.opacity=0;
  }
  renderer.render(scene,camera);
 }
-setStep(0);updateUI(0);requestAnimationFrame(animate);
-addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,2))});
+
+setStep(0); updateUI(0); requestAnimationFrame(animate);
+
+addEventListener('resize',()=>{
+ camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth,innerHeight); renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+});
 </script>
 </body>
 </html>
