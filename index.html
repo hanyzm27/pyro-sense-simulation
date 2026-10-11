@@ -58,8 +58,8 @@ button{font:inherit;cursor:pointer;border:1px solid #315b78;border-radius:10px;b
 <div class="footnote">Educational concept only. Not a validated mine-safety design or prediction of real explosion performance.</div>
 <div id="toast"></div>
 <script type="module">
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
-import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+import { OrbitControls } from 'https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js';
 
 const host=document.querySelector('#scene');
 const scene=new THREE.Scene(); scene.background=new THREE.Color(0x071321); scene.fog=new THREE.FogExp2(0x071321,0.022);
