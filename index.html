@@ -175,10 +175,18 @@ function reset(){
 
 function toast(t){$('#toast').textContent=t; $('#toast').style.opacity=1; setTimeout(()=>$('#toast').style.opacity=0,1500)}
 
-$('#simulate').addEventListener('click', simulate);
-$('#reset').addEventListener('click', reset);
-$('#view').addEventListener('click', ()=>{camera.position.set(11,8,17); controls.target.set(0,2,0); controls.update()});
-$('#labels').addEventListener('click', ()=>{labelsOn=!labelsOn; labels.forEach(l=>l.visible=labelsOn); $('#labels').textContent='Labels: '+(labelsOn?'ON':'OFF')});
+document.querySelector('#simulate').addEventListener('click', simulate);
+document.querySelector('#reset').addEventListener('click', reset);
+document.querySelector('#view').addEventListener('click', () => {
+    camera.position.set(11, 8, 17);
+    controls.target.set(0, 2, 0);
+    controls.update();
+});
+document.querySelector('#labels').addEventListener('click', () => {
+    labelsOn = !labelsOn;
+    labels.forEach(l => l.visible = labelsOn);
+    document.querySelector('#labels').textContent = 'Labels: ' + (labelsOn ? 'ON' : 'OFF');
+});
 
 function animate(now){
  requestAnimationFrame(animate);
